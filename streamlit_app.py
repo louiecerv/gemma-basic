@@ -2,29 +2,19 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-import altair as alt
-import openai
-openai.api_key = st.secrets["API_key"]
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
-import openai
-import os
+access_token =  st.secrets["API_key"]
 
-def generate_code(input_string): 
-    response = openai.Completion.create(
-        engine="text-davinci-003", 
-        prompt= input_string +"\n",
-        max_tokens=1024,
-        top_p=1.0,
-        frequency_penalty=0.0,
-        presence_penalty=0.0,
-        temperature=0.0,
-        stop=None,
-    )
-    answer = response.choices[0].text.strip()
-    return answer
 
 # Define the Streamlit app
 def app():
+    # Model selection (choose between base or instruction-tuned variant)
+    model_name = "google/gemma-2b-it"  # Example: Instruction-tuned Gemma 2B
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name, token=access_token)
+    model = AutoModelForCausalLM.from_pretrained(model_name, token=access_token)
+
     st.header("Welcome to CodeGPT")
     st.subheader("Louie F. Cervantes M. Eng. \n(c) 2023 WVSU College of ICT")
     
