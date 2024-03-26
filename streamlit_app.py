@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import os
 
 document_text = "SpaceX: Aiming for the Stars SpaceX is driven by an ambitious mission and vision\
 for the future of space exploration. Here's a breakdown of their key goals and objectives: \
