@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-access_token =  st.secrets["API_key"]
+access_token =  st.secrets["HUGGINGFACE_API_KEY"]
 
 document_text = "SpaceX: Aiming for the Stars SpaceX is driven by an ambitious mission and vision\
 for the future of space exploration. Here's a breakdown of their key goals and objectives: \
