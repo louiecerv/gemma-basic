@@ -44,6 +44,9 @@ def process_document(document):
 
 # Define the Streamlit app
 def app():
+    # Access the environment variable set by Streamlit Secrets Management
+    huggingface_api_key = os.environ.get("HUGGINGFACE_API_KEY")
+
     # Model selection (choose between base or instruction-tuned variant)
     model_name = "google/gemma-2b-it"  # Example: Instruction-tuned Gemma 2B
 
