@@ -6,6 +6,41 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 access_token =  st.secrets["API_key"]
 
+document_text = "SpaceX: Aiming for the Stars SpaceX is driven by an ambitious mission and vision\
+for the future of space exploration. Here's a breakdown of their key goals and objectives: \
+Mission:  Revolutionize space technology, with the ultimate goal of enabling people to live \
+on other planets. This two-pronged approach emphasizes innovation in space travel technology \
+while keeping a long-term vision of human Martian settlements.  Their focus on reusable rockets \
+and cost reduction exemplifies their mission to make space travel more accessible. \
+Vision (unofficial):** Make life multi-planetary by establishing a self-sustaining city \
+on Mars. While SpaceX doesn't have an official vision statement, their actions speak volumes.  \
+The development of the Starship program, a fully reusable launch vehicle and spacecraft, is a clear \
+indicator of their vision for interplanetary travel and colonization.  \
+**Goals and Objectives:**\
+* Develop and implement next-generation, fully reusable launch vehicles (Starship and \
+Super Heavy) for cost-effective space travel. [2] * Reduce the cost of space access \
+through innovation and reusability. \
+* Secure future resources and ensure the long-term survival of humanity through a multi-planetary future.  \
+* Foster international collaboration in space exploration endeavors. \
+SpaceX's mission, vision, and goals all work together to push the boundaries of space exploration. \
+They are constantly striving to make space travel more affordable and reliable, paving the way \
+for a future where humanity is no longer confined to Earth."
+
+def process_document(document):
+    """
+    Preprocesses the document for model input.
+
+    Args:
+        document: String containing the document text.
+
+    Returns:
+        Processed document as a string.
+    """
+    # You can add pre-processing steps here like:
+    # - Removing stop words
+    # - Summarizing the document
+    # - Converting to a specific format
+    return document
 
 # Define the Streamlit app
 def app():
@@ -15,41 +50,31 @@ def app():
     tokenizer = AutoTokenizer.from_pretrained(model_name, token=access_token)
     model = AutoModelForCausalLM.from_pretrained(model_name, token=access_token)
 
-    st.header("Welcome to CodeGPT")
-    st.subheader("Louie F. Cervantes M. Eng. \n(c) 2023 WVSU College of ICT")
-    
-    st.title("CodeGPT will generate program codes from natural language instructions")
-    st.write("One on the most useful uses of generative AI is to generate programming codes in several languages.  A very useful tool that would speed up and enhance the output of software developers.")
-    st.write("Copy and paste one of the following task into the input box.  You can also come up with your own set of instructions.")
-    st.write("Write a program that calculates the average of a list of numbers.")
-    st.write("Create a function that reverses a string.")
-    st.write("Write a program that takes in two numbers and outputs their sum.")
-    st.write("Create a function that checks if a string is a palindrome.")
-    st.write("Write a program that reads in a file and outputs the number of lines in the file.")
-    st.write("Create a function that takes in a list of integers and returns the largest integer in the list.")
-    st.write("Write a program that generates a random number between 1 and 100.")
-    st.write("Create a function that takes in a string and returns the number of vowels in the string.")
-    st.write("Write a program that reads in a list of words and outputs the number of words that start with the letter 'a'.")
-    st.write("Create a function that takes in a list of strings and returns the string with the most characters.")
-    
-    language = 'python'
-    options = ['python', 'Java', 'C++']
-    selected_option = st.selectbox('Select the programming language', options)
-    if selected_option=='python':
-        language = selected_option
-    if selected_option=='Java':
-        language = selected_option
-    if selected_option=='C++':
-         language = selected_option
-             
-    # Create a multiline text field
-    user_input = st.text_area('Paste the instructions in this box', height=10)
-    
-             
-    # Display the text when the user submits the form
-    if st.button('Submit'):
-        output = generate_code("Generate program codes in the language " + language + " to perform the task " + user_input)
-        st.text(output)
+    st.header("Welcome to Google Gemma AI")
+    st.subheader("Louie F. Cervantes M. Eng. \n(c) 2024 WVSU College of ICT")
+
+    # Process the document
+    processed_document = process_document(document_text)
+
+    if st.button("Submit"):
+        # Get user input
+        user_input = st.text_input("You:")
+
+        # Preprocess conversation history (you can modify this)
+        history = f"Document: {processed_document}\nYou: {user_input}"
+
+        # Encode the conversation history
+        input_ids = tokenizer(history, return_tensors="pt")["input_ids"]
+
+        # Generate response from the model
+        output = model.generate(input_ids, max_length=1000, do_sample=True)
+
+        # Decode the generated response
+        response = tokenizer.decode(output[0], skip_special_tokens=True)
+
+        # Print the model response
+        st.write(f"Gemma: {response}")
+
 
 # Run the app
 if __name__ == "__main__":
